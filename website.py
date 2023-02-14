@@ -81,7 +81,7 @@ if rad == "How to use app?":
     st.title(rad)
     st.write("You should upload the field data and the area values of the vehicles as two separate .xlsx files.")
     st.write("The distance should be entered for which the data is measured.")
-    st.write("Choose the time interval for which you want the PCU values be calculated for all vehicles.")
+    st.write("Choose the time interval for which you want the PCU values to be calculated for all vehicles.")
     df = readfile_1('sample.xlsx')
     st.write("The format of the data should be as follows:")
     st.table(df)
@@ -91,7 +91,7 @@ if rad == "How to use app?":
         "label" : [1, 2, 3, 4, 5, 6, 7]
     })
     st.table(df)
-    st.warning(' Keep format as specified above.')
+    st.warning(' Follow the above specified format for input.')
 
 
 if rad == "Upload data":
