@@ -84,6 +84,14 @@ def pcu(data, area, dist, tim):
             meanPCU["PCU"+vec_type[k]]=list
     df_result = pd.DataFrame(meanPCU)
 
+    st.write(' ')
+    st.write("The average values of PCU for the vehicles in the given interval are as follows:")
+    st.table(df_result)
+    st.write(' ')
+    st.write("Follwing are the calculations involved in getting PCU values:")
+    st.dataframe(df_interval)
+    st.write(' ')
+    
     fig = plt.figure()
     plt.scatter(df_interval["density"], df_interval["exitFlowPHour"])
     popt, _ = curve_fit(objective, df_interval["density"], df_interval["exitFlowPHour"], bounds = ((-120, -120, -120), (120, 120, 120)))
@@ -103,4 +111,30 @@ def pcu(data, area, dist, tim):
     st.write(fig)
     plt.savefig("graph.png")
     df_interval.fillna(value=0, inplace=True)
+    
+    PCUirc = {1.0:1.0,2.0:1.0,3.0:0.75,4.0:2.0,5.0:3.7,6.0:3.7,7.0:3.7}
+    lis=[]
+    for k in type_map:
+        if type_map[k]!=-1:
+            lis.append(PCUirc[k])
+
+    fig2, ax = plt.subplots()
+    pred = df_result.iloc[0].to_list()
+    plt.plot([x[3:] for x in df_result.columns], pred, label="Calculated Dynamic PCUs")
+    plt.plot(lis, label="PCUs as per IRC")
+    plt.legend()
+    plt.title("Comparison of IRC's PCU vs dynamic PCUs")
+    plt.xlabel("Vehicle Type")
+    plt.ylabel("PCU")
+    plt.xticks(fontsize=10)
+    ax.set_yticks(np.arange(0.0, max(pred)+1, 0.5))
+    st.write(fig2)
+    plt.savefig("comparison.png")
+
+    
+    MSE = np.square(np.subtract(lis,pred)).mean()
+    rmse = math.sqrt(MSE)
+    st.write("Standard Error in the calculations of dynamic PCUs for the given time interval : ",np.round(rmse, 4))
+    st.write(" ")
+    
     return df_result, df_interval
