@@ -40,17 +40,17 @@ if rad == "About":
     img = Image.open('bigcar.png')
     left.image(img, width=300, caption="PCU value : 1.5")
     img = Image.open('car.png')
-    right.image(img, width=300, caption="PCU value : 1.0")
+    right.image(img, width=270, caption="PCU value : 1.0")
 
     left1, right1 = st.columns(2)
     img = Image.open('2wheeler.png')
     left1.image(img, width=300, caption="PCU value : 0.75")
     img = Image.open('lcv.png')
-    right1.image(img, width=300, caption="PCU value : 2.0")
+    right1.image(img, width=260, caption="PCU value : 2.0")
 
     left2, right2 = st.columns(2)
     img = Image.open('bus.png')
-    left2.image(img, width=300, caption="PCU value : 3.7")
+    left2.image(img, width=280, caption="PCU value : 3.7")
     img = Image.open('truck.png')
     right2.image(img, width=300, caption="PCU value : 3.7")
 
