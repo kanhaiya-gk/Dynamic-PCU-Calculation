@@ -33,7 +33,8 @@ def readfile_1(uploaded_file):
 rad = st.sidebar.radio("Navigation", ["About", "How to use app?", "Upload data"])
 
 if rad == "About":
-    st.title("About")
+    st.title("Estimation of Dynamic PCU by Chandra's Method")
+    st.header("About")
     st.write("The term ‘Passenger Car Unit (PCU)’, used in transportation engineering, is a metric that is used to measure the rate of traffic flow on a highway.  \n\nThe term PCU was first defined by the **Highway Capacity Manual** in 1965, as “The number of passenger cars displaced in the traffic flow by a truck or a bus, under prevailing roadway and traffic conditions”. In other words, the PCU can be referred to as a measure of the impact that a mode of transport has on a traffic variable, with reference to the impact of passenger cars.  \n\nThis helps us to gauge the various mix of vehicles that ply on a highway, such as trucks, buses, recreational vehicles, motorcycles, etc., in addition to the conventional passenger cars that we use. As this classification of vehicles is of prime importance to various studies and analyses by transportation engineers, ‘PCU’ is an essential metric that is to be measured.  \n\nThe typical ‘PCU’ values that are assigned to various categories of vehicles are as follows:  \n\n ")
 
     left, right = st.columns(2)
