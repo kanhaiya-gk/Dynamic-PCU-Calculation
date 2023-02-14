@@ -6,6 +6,8 @@ from io import BytesIO
 from PIL import Image
 from zipfile import ZipFile
 
+st.set_page_config(page_title="Estimation of Dynamic PCU by Chandra's Method")
+
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
