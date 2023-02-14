@@ -131,16 +131,11 @@ if rad == "Upload data":
         df.to_excel("pcu.xlsx")
         df2.to_excel("data.xlsx")
 
-        st.write("The average values of PCU for the vehicles in the given interval are as follows:")
-        st.table(df)
-
         with ZipFile('results.zip', 'w') as zip:
             zip.write('graph.png')
             zip.write("pcu.xlsx")
             zip.write("data.xlsx")
-
-        st.write("Follwing are the calculations involved in getting PCU values:")
-        st.dataframe(df2)
+            zip.write("comparison.png")
         
         with open("results.zip", "rb") as fp:
             st.download_button(
