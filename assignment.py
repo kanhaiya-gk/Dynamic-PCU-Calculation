@@ -5,8 +5,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize, curve_fit
 
-def objective(x, a, b, c):
-    return a * x**2 + b * x + c
+def objective(x, a, b):
+    return a * x**2 + b * x
 
 def pcu(data, area, dist, tim):
     # df = pd.read_excel(data, usecols='B:E')
@@ -93,16 +93,12 @@ def pcu(data, area, dist, tim):
     st.write(' ')
     
     fig = plt.figure()
+    df_interval['density'].fillna(value=0,inplace=True)
     plt.scatter(df_interval["density"], df_interval["exitFlowPHour"])
-    popt, _ = curve_fit(objective, df_interval["density"], df_interval["exitFlowPHour"], bounds = ((-120, -120, -120), (120, 120, 120)))
-    a, b, c = popt
-    if b**2-4*a*c >= 0 :
-        mx = max(((-b+math.sqrt(b**2 - 4*a*c))/(2*a)),(-b-math.sqrt(b**2 - 4*a*c))/(2*a))
-    else:
-        mx = 150
-        st.error("Invalid data! Please upload valid data files.") 
-    x_line = np.arange(0, mx, 1)
-    y_line = objective(x_line, a, b, c)
+    popt, _ = curve_fit(objective, df_interval["density"], df_interval["exitFlowPHour"], bounds = ((-np.inf, 0), (0, np.inf)))
+    a, b = popt
+    x_line = np.arange(0, -b/a + 1, 1)
+    y_line = objective(x_line, a, b)
     
     plt.plot(x_line, y_line, '--', color='red')
     plt.title("Flow Density curve")
