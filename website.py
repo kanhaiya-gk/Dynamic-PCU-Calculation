@@ -27,7 +27,7 @@ def readfile(uploaded_file):
 
 def readfile_1(uploaded_file):
     if uploaded_file is not None:
-        dataframe = pd.read_excel(uploaded_file)
+        dataframe = pd.read_excel(uploaded_file,usecols="A:D")
         return dataframe
 
 rad = st.sidebar.radio("Navigation", ["About", "How to use app?", "Upload data"])
