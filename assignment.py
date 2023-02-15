@@ -53,8 +53,21 @@ def pcu(data, area, dist, tim):
         type_map[index_map[k]] = k
         i=i+1
     
-    vec_type = {1.0:"SmallCar",2.0:"BigCar",3.0:"TwoWheeler",4.0:"LCV",5.0:"Bus",6.0:"SingleAxle",7.0:"MultiAxle"}
+#     vec_type = {1.0:"SmallCar",2.0:"BigCar",3.0:"TwoWheeler",4.0:"LCV",5.0:"Bus",6.0:"SingleAxle",7.0:"MultiAxle"}
+    areaValues = area
+    areaValues = areaValues.dropna()
 
+    areaValues['Category'] = areaValues['Category'].str.lower()
+    areaValues['Category'] = areaValues['Category'].str.replace(" ","")
+
+    areaValues.set_index("Category", inplace=True)
+    
+    vec_type = {}
+    t=1
+    for j in areaValues.index.values.tolist():
+        vec_type[t]=j.replace(" ", "").lower()
+        t=t+1
+    
     for k in type_map:
         if type_map[k]!=-1:
             df_interval[vec_type[k]]=pd.DataFrame(df1.groupby([pd.cut(df1['Time Stamp Exit'],temp), "Vehicle Type"], as_index=False)["Lane"].count().groupby("Vehicle Type")).to_dict()[1][type_map[k]].reset_index()["Lane"]
@@ -67,14 +80,14 @@ def pcu(data, area, dist, tim):
         if type_map[k]!=-1:
             df_interval[vec_type[k]+"AverageSpeed"]=df_interval[vec_type[k]+"Speed"] / df_interval[vec_type[k]]
 
-    areaValues = area
-    areaValues = areaValues.dropna()
+#     areaValues = area
+#     areaValues = areaValues.dropna()
 
-    areaValues.set_index("Category", inplace=True)
+#     areaValues.set_index("Category", inplace=True)
 
     for k in type_map:
         if type_map[k]!=-1:
-            df_interval["PCU"+vec_type[k]]=(df_interval["SmallCarAverageSpeed"]/df_interval[vec_type[k]+"AverageSpeed"])/(areaValues.at["SmallCar", "Area"]/areaValues.at[vec_type[k], "Area"])
+            df_interval["PCU"+vec_type[k]]=(df_interval["smallcarAverageSpeed"]/df_interval[vec_type[k]+"AverageSpeed"])/(areaValues.at["smallcar", "Area"]/areaValues.at[vec_type[k], "Area"])
 
     meanPCU={}
     for k in type_map:
@@ -108,7 +121,12 @@ def pcu(data, area, dist, tim):
     plt.savefig("graph.png")
     df_interval.fillna(value=0, inplace=True)
     
-    PCUirc = {1.0:1.0,2.0:1.0,3.0:0.75,4.0:2.0,5.0:3.7,6.0:3.7,7.0:3.7}
+#     PCUirc = {1.0:1.0,2.0:1.0,3.0:0.75,4.0:2.0,5.0:3.7,6.0:3.7,7.0:3.7}
+    PCUIrc = {"smallcar":1.0,"bigcar":1.0,"twowheeler":0.75,"2wheeler":0.75,"truck":3.7,"bus":3.7,"cycle":0.5,"3wheeler":2.0,"lcv":2.0,"tractortrailer":5.0, "singleaxle":3.7,"multiaxle":3.7, "auto-rickshaw":2.0, "tonga":2.0, "handcart":3.0, "cyclerickshaw":2.0, "motorcycle":0.75, "scooter":0.75, "pick-upvan":1.0, "passengercar":1.0}
+    PCUirc={}
+    for j in vec_type:
+        PCUirc[j] = PCUIrc[vec_type[j]] 
+        
     lis=[]
     for k in type_map:
         if type_map[k]!=-1:
